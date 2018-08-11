@@ -1,0 +1,144 @@
+(define (domain automated-submarine-manoeuvrability)
+
+(:requirements :typing :fluents :durative-actions)
+
+(:types
+	island_locations - location
+	crew small_submarine medium_submarine large_submarine - submarine
+	small_cargo medium_cargo large_cargo - cargo
+	zone
+	crew
+
+	)
+
+(:predicates
+	(empty ?s - submarine)
+	(charge ?s - submarine)
+	(low-charge ?s - submarine)
+	(cargo ?s - submarine)
+	(no-cargo ?s - submarine)
+	(hascrew ?s - submarine)
+	(no-crew ?s - submarine)
+	(at ?s - submarine ?l - location)
+	(in ?l - location ?i - zone)
+	(is ?c - cargo ?l - location)
+	(on ?c - cargo ?s - submarine)
+	(boarding-in ?cr - crew ?l - location)
+	(can-dive-in-red-zone ?z - zone)
+	(can-dive-in-orange-zone ?z - zone)
+	(can-dive-in-green-zone ?z - zone))
+
+    (:functions
+	(dive-time ?s - submarine)
+	(recharge-time ?s - submarine)
+	(load-time ?s - submarine))
+
+(:durative-action   dive-in-red-zone
+     :parameters 	(?s - submarine ?froml ?tol - island_locations ?fromz ?toz - zone)
+     :duration 	(=?duration(dive-time ?s))
+     :condition	(and (at start ( at ?s ?froml))
+			          (over all (can-dive-in-red-zone ?fromz))
+			          (over all (can-dive-in-red-zone ?toz))
+			          (over all (at ?s ?froml))
+			          (over all (in ?froml ?fromz)))
+				     	   
+     :effect        	 (and (at start (not (at ?s ? froml)))
+		                      (at end (at ?s ?tol))
+			           (at end (in ?tol ?toz)))
+				  	    
+    )
+
+    (:durative-action   dive-in-orange-zone
+     :parameters           (?s - submarine ?froml ?tol - island_locations ?fromz ?toz - zone)
+     :duration 	    (=?duration(dive-time ?s))
+     :condition               (and (at start ( at ?s ?froml))
+	                                    (over all (can-dive-in-orange-zone ?fromz))
+			  (over all (can-dive-in-orange-zone ?toz))
+			  (over all (at ?s ?froml))
+			  (over all (in ?froml ?fromz)))
+						
+     :effect                     (and (at start (not (at ?s ? froml)))
+		                        (at end (at ?s ?tol))
+			             (at end (in ?tol ?toz)))
+     )
+
+    (:durative-action   dive-in-green-zone
+     :parameters     (?s - submarine ?froml ?tol - island_locations ?fromz ?toz - zone)
+     :duration          (=?duration(dive-time ?s))
+     :condition         (and (at start ( at ?s ?froml))
+			        (over all (can-dive-in-green-zone ?fromz))
+			        (over all (can-dive-in-green-zone ?toz))
+			        (over all (at ?s ?froml))
+			        (over all (in ?froml ?fromz)))
+						
+     :effect                (and (at start (not (at ?s ? froml)))
+		                    (at end (at ?s ?tol))
+		                    (at end (in ?tol ?toz)))
+						
+  )
+
+(:durative-action 	recharge
+    :parameters 	           (?s - submarine ?ch - island_locations)
+    :duration 	  	           (=?duration(recharge-time ?s))
+    :condition 	  	(and (at start (low-charge ?s))
+		                                (at start (at ?s ?ch))
+		                                (over all (at ?s ?ch)))
+		             	
+    :effect 	   	        (and (at end (charge ?s))
+		                             (at start (not (low-charge ?s))))
+				   		
+    )
+
+     (:durative-action 	pick-up-cargo
+       :parameters   	            (?s - submarine ?cz - island_locations ?c - cargo)
+        :duration 	  	 (= ?duration (load-time ?s))
+        :condition 	   	 (and (at start (at ?s ?cz))
+				           (at start (is ?c ?cz))
+			                      (over all ( at ?s ?cz)))
+						
+        :effect		   	(and (at end ( at ?s ?cz))
+   			                    (at end (no-cargo ?s))
+				         (at end (on ?c ?s))
+				         (at start (not (is ?c ?cz))))
+    )
+
+   (:durative-action 	drop-cargo
+    :parameters	  	(?s - submarine ?dz - island_locations ?c - cargo)
+    :duration	   	           (=?duration(load-time ?s))
+    :condition 	   	(and (at start (at ?s ?dz))
+			                    (at start (on ?c ?s))
+			           	         (over all (at ?s ?dz)))
+						
+     :effect 	   	            (and (at end (at ?s ?dz))
+				          (at end (is ?c ?dz))
+				          (at start (not (on ?c ?s))))
+ )
+
+  (:durative-action 	board-crew
+   :parameters 	         (?cr - crew ?s - submarine ?b - island_locations)
+   :duration 	   	         (=?duration(load-time ?s))
+   :condition 	                    (and (at start ( at ?s ?b))
+		                              (at start (boarding-in ?cr ?b))
+		                              (over all (at ?s ?b)))
+		                
+   :effect 	                     (and (at start (not (boarding-in ?cr ?b)))
+			                   (at end (hascrew ?s))
+			                   (at end (at ?s ?b)))
+						
+   )
+
+(:durative-action 	depart-crew
+    :parameters 	   	(?cr - crew ?s - submarine ?p - island_locations)
+    :duration 	   	   	(=?duration(load-time ?s))
+    :condition	   	   	(and (at start (at ?s ?p))
+		             	         (at start (hascrew ?s))
+		           		         (over all (at ?s ?p)))
+		           	   	
+    :effect 	      	            (and (at start (not (hascrew ?s)))
+			                     (at end (no-crew ?s))
+				          (at end (boarding-in ?cr ?p)))
+					 	
+    )
+
+
+) 

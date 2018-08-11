@@ -1,0 +1,72 @@
+PDDL Planning Problem File 2
+
+(define (problem automated-submarine-manoeuvrability-problem2)
+
+(:domain automated-submarine-manoeuvrability)
+(:objects
+
+POL2 MAL2 IRL2 RAL2 EIL2 NGL2 ZIL2 - island_locations
+	SS1 SS2  - small_submarine
+	MS1  MS2  - medium_submarine
+	LS1 LS2 - large_submarine
+	zone1 zone2 zone3 zone4 zone5 zone6 zone7 - zone
+	)
+
+(:init
+
+(in POL2 zone7) (in MAL2 zone7) (in IRL2 zone6) (in RAL2 zone6)
+(in EIL2 zone5) (in NGL2 zone4) (in ZIL2 zone3)
+
+(can-dive-in-green-zone zone7)
+(can-dive-in-green-zone zone6)
+(can-dive-in-green-zone zone5)
+
+(can-dive-in-orange-zone zone4)
+(can-dive-in-orange-zone zone3)
+
+(can-dive-in-red-zone zone2)
+(can-dive-in-red-zone zone1)
+
+(charge SS1)
+(at SS1 NGL2)
+(=(dive-time SS1) 4)
+(=(recharge-time SS1) 10) 
+
+(low-charge SS2)
+(at SS2 EIL2) 
+(=(dive-time SS2) 6) 
+(=(recharge-time SS2) 9) 
+
+(low-charge MS1) 
+(at MS1 RAL2) 
+(=(dive-time MS1) 4) 
+(=(recharge-time MS1) 6) 
+
+(charge MS2)  
+(at MS2 EIL2) 
+(=(dive-time MS2) 6) 
+(=(recharge-time MS2) 4) 
+
+(low-charge LS1)  
+(at LS1 EIL2)
+(=(dive-time LS1) 6) 
+(=(recharge-time LS1) 5) 
+ 
+(charge LS2) 
+(at LS2 POL2) 
+(=(dive-time LS2) 10) 
+(=(recharge-time LS2) 10) 
+)
+
+
+
+(:goal
+	(and
+		(at SS1 ZIL2) (charge SS1)
+		(at SS2 NGL2) (charge SS2) 
+		(at MS1 EIL2) (charge MS1) 
+		(at MS2 NGL2) (charge MS2) 
+		(at LS1 MAL2) (charge LS1)
+		(at LS2 EIL2) (charge LS2)
+		
+)))

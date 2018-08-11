@@ -1,0 +1,71 @@
+PDDL Planning Problem File 3
+
+(define (problem automated-submarine-manoeuvrability-problem3)
+
+(:domain automated-submarine-manoeuvrability)
+(:objects
+
+POL1 POL3 MAL1 MAL3 IRL1 IRL3 RAL1 RAL3 EIL1 EIL3 NGL1 NGL3 ZIL1 ZIL3 - island_locations 
+	MS1 MS2 MS3 - medium_submarine
+	SC1 - small_cargo
+	MC1 - medium_cargo
+	LC1 - large_cargo
+	zone1 zone2 zone3 zone4 zone5 zone6 zone7 - zone
+)
+
+(:init
+
+(in POL1 zone7) (in MAL1 zone7)
+
+(in IRL1 zone6) (in RAL1 zone6) 
+
+(in EIL1 zone5) 
+
+(in NGL1 zone4)
+
+(in ZIL1 zone3) 
+
+(is SC1 POL1) (is MC1 MAL1) (is LC1 RAL1)
+
+(can-dive-in-green-zone zone7)
+(can-dive-in-green-zone zone6)
+(can-dive-in-green-zone zone5)
+
+(can-dive-in-orange-zone zone4)
+(can-dive-in-orange-zone zone3)
+
+(can-dive-in-red-zone zone2)
+(can-dive-in-red-zone zone1)
+
+(empty MS1)
+(charge MS1)
+(at MS1 POL1) 
+(=(dive-time MS1) 11) 
+(=(recharge-time MS1) 10)
+(=(load-time MS1) 1)
+
+(empty MS2)
+(low-charge MS2)
+(at MS2 MAL1) 
+(=(dive-time MS2) 13) 
+(=(recharge-time MS2) 12)
+
+(=(load-time MS1) 3)
+
+(empty MS3)
+(charge MS3)
+(at MS3 RAL1)  
+(=(dive-time MS3) 13) 
+(=(recharge-time MS3) 12)
+(=(load-time MS1) 5)
+
+)
+
+(:goal
+	(and
+	(is SC1 IRL1) (at MS1 IRL1) (charge MS1)
+	(is MC1 RAL1) (at MS2 RAL1) (charge MS2)
+	(is LC1 EIL1) (at MS3 EIL1) (charge MS3)
+	
+
+)))

@@ -1,0 +1,139 @@
+PDDL Planning Problem File 1
+
+(define (problem automated-submarine-manoeuvrability)
+
+(:domain automated-submarine-manoeuvrability) 
+(:objects
+
+POL1 POL2 POL3 MAL1 MAL2 MAL3 IRL1 IRL2 IRL3 RAL1 RAL2 RAL3 EIL1 EIL2 EIL3 NGL1 NGL2 NGL3 ZIL1 ZIL2 ZIL3 - island_locations
+	SS1 SS2 SS3 SS4 - small_submarine
+	MS1 MS2 MS3 - medium_submarine
+	LS1 LS2 - large_submarine
+	SC1 SC2 SC3 SC4 - small_cargo
+	MC1 MC2 MC3 - medium_cargo
+	LC1 LC2 - large_cargo
+	zone1 zone2 zone3 zone4 zone5 zone6 zone7 - zone
+	crew1 crew2 crew3 crew4 crew5 crew6 crew7 crew8 crew9 - crew
+)
+
+(:init
+(in POL1 zone7) (in POL2 zone7) (in POL3 zone7) 
+
+(in MAL1 zone7) (in MAL2 zone7) (in MAL3 zone7) 
+
+(in IRL1 zone6) (in IRL2 zone6) (in IRL3 zone6)
+
+(in RAL1 zone6) (in RAL2 zone6) (in RAL3 zone6) 
+
+(in EIL1 zone5) (in EIL2 zone5) (in EIL3 zone5) 
+
+(in NGL1 zone4) (in NGL2 zone4) (in NGL3 zone4) 
+
+(in ZIL1 zone3) (in ZIL2 zone3) (in ZIL3 zone3)
+
+(is SC1 EIL3) (is SC2 IRL3) (is SC3 POL3) (is SC4 NGL3) 
+(is MC1 NGL2) (is MC2 ZIL3) (is MC3 MAL3)
+(is LC1 EIL2) (is LC2 POL2) 
+
+(can-dive-in-green-zone zone7)
+(can-dive-in-green-zone zone6)
+(can-dive-in-green-zone zone5)
+
+(can-dive-in-orange-zone zone4)
+(can-dive-in-orange-zone zone3)
+
+(can-dive-in-red-zone zone2)
+(can-dive-in-red-zone zone1)
+(empty SS1)
+
+(charge SS1)
+(boarding-in crew1 EIL3)
+(at SS1 EIL3)
+(=(dive-time SS1) 3) 
+(=(recharge-time SS1) 2)
+(=(load-time SS1) 2)
+
+(empty SS2)
+(low-charge SS2) 
+(boarding-in crew2 IRL3)
+(at SS2 IRL3)
+(=(dive-time SS2) 3) 
+(=(recharge-time SS2) 2)
+(=(load-time SS2) 2)
+
+(empty SS3)
+(charge SS3)
+(boarding-in crew3 POL3)
+(at SS3 POL3) 
+(=(dive-time SS3) 3)
+(=(recharge-time SS3) 2)
+(=(load-time SS3) 2)
+
+(empty SS4)
+(low-charge SS4)
+(boarding-in crew4 NGL3)
+(at SS4 NGL3) 
+(=(dive-time SS4) 3) 
+(=(recharge-time SS4) 2)
+(=(load-time SS4) 2)
+
+(empty MS1)
+(charge MS1)
+(boarding-in crew5 NGL2)
+(at MS1 NGL2) 
+(=(dive-time MS1) 5) 
+(=(recharge-time MS1) 3)
+(=(load-time MS1) 4)
+
+(empty MS2)
+(low-charge MS2)
+(boarding-in crew6 ZIL3)
+(at MS2 ZIL3) 
+(=(dive-time MS2) 5) 
+(=(recharge-time MS2) 3)
+(=(load-time MS2) 4)
+
+(empty MS3)
+(charge MS3)
+(boarding-in crew7 MAL3)
+(at MS3 MAL3) 
+(=(dive-time MS3) 5) 
+
+(=(recharge-time MS3) 3)
+(=(load-time MS3) 4)
+
+(empty LS1)
+(low-charge LS1)
+(boarding-in crew8 EIL2)
+(at LS1 EIL2) 
+(=(dive-time LS1) 7) 
+(=(recharge-time LS1) 4)
+(=(load-time LS1) 6)
+
+(empty LS2)
+(charge LS2)
+(boarding-in crew9 POL2)
+(at LS2 EIL1) 
+(=(dive-time LS2) 7) 
+(=(recharge-time LS2) 4)
+(=(load-time LS2) 6)
+
+
+
+
+)
+
+(:goal 	
+	(and 
+	(boarding-in crew1 NGL1) (charge SS1) (at SS1 NGL1) (is SC1 NGL1)
+	(boarding-in crew2 EIL3) (charge SS2) (at SS2 EIL3) (is SC2 EIL3)
+	(boarding-in crew3 IRL3) (charge SS3) (at SS3 IRL3) (is SC3 IRL3)
+	(boarding-in crew4 ZIL3) (charge SS4) (at SS4 ZIL3) (is SC4 ZIL3)
+	(boarding-in crew5 ZIL2) (charge MS1) (at MS1 ZIL2) (is MC1 ZIL2)
+	(boarding-in crew6 ZIL3) (charge MS2) (at MS2 ZIL3) (is MC2 ZIL3)
+	(boarding-in crew7 RAL3) (charge MS3) (at MS3 RAL3) (is MC3 RAL3)
+	(boarding-in crew8 NGL2) (charge LS1) (at LS1 NGL2) (is LC1 NGL2)
+	(boarding-in crew9 IRL2) (charge LS2) (at LS2 IRL2) (is LC2 IRL2)
+
+	
+	)))
